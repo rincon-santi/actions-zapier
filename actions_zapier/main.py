@@ -6,6 +6,7 @@ logging.basicConfig(level=logging.INFO)
 import json
 import os
 import datetime
+import requests
 
 PROJECT_ID = os.environ.get('PROJECT_ID')
 
@@ -48,19 +49,33 @@ def unknown_operation():
         mimetype='text/plain')
     return response
 
-#@APP.route('/create', methods=['POST', ])
-#def create_entity():
-#    logging.info("Received request to create entity: {}".format(request))
-#    request_json = json.loads(request.data)
-#    author = request_json['author']
-#    publish_message(author=author, entityId=entity_id, operation="create",
-#                    payload=json.dumps({"mandatory_keys": "mandatory_values",
-#                                        **{key: request_json[key] for key in request_json.keys() if key not in ARGS_DEFINITION["create-user"]["args"].keys()}}))
-#    response = APP.response_class(
-#        response=json.dumps({"payload":{}, "responseMessage":"Created entity {id}".format(id=entity_id)}),
-#        status=200,
-#        mimetype='application/json') 
-#    return response
+
+@APP.route('/send_email', methods=['POST', ])
+def send_email_zap():
+    logging.info("Received request to trigger an email zap: {}".format(request))
+    request_json = json.loads(request.data)
+    # Ensure zap_url for the email zap is either passed in or set as an environment variable
+    zap_url = request_json.get('zap_url', os.environ.get('EMAIL_ZAP_URL'))
+    # Prepare the payload. This will depend on how you've set up your zap.
+    # You'll want to extract the necessary information from the request data.
+    payload = {
+        "email": request_json['email'],
+        "subject": request_json['subject'],
+        "body": request_json['body'],
+    }
+    response = requests.post(zap_url, data=json.dumps(payload), headers={'Content-Type': 'application/json'})
+
+    if response.status_code == 200:
+        status_message = 'Email Zap action triggered successfully'
+    else:
+        status_message = 'Failed to trigger Email Zap action'
+
+    response = APP.response_class(
+        response=json.dumps({"payload": payload, "responseMessage": status_message}),
+        status=response.status_code,
+        mimetype='application/json') 
+    return response
+
     
 @functions_framework.http
 def entity_commands(request):

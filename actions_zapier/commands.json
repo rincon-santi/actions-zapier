@@ -1,0 +1,43 @@
+{
+    "zapier-send-email": {
+        "description": {
+            "EN": "Send an email using zapier integration"
+        },
+        "category": "internet",
+        "args": {
+            "author": {
+                "description": {
+                    "EN": "The author of the command"
+                },
+                "type": "string",
+                "required": true,
+                "default": "undefined"
+            },
+            "to": {
+                "description": {
+                    "EN": "email to"
+                },
+                "type": "string",
+                "required": true,
+                "default": "undefined"
+            },
+            "subject": {
+                "description": {
+                    "EN": "email subject"
+                },
+                "type": "string",
+                "required": true,
+                "default": "undefined"
+            },
+            "body": {
+                "description": {
+                    "EN": "email body"
+                },
+                "type": "string",
+                "required": true,
+                "default": "undefined"
+            }
+        },
+        "endpoint": "https://actions-zapier-ai32xjq4va-ew.a.run.app/send_email"
+    }
+}

@@ -14,28 +14,13 @@ steps:
   - gcloud
   - functions
   - deploy
-  - [entity]-commands
+  - actions-zapier
   - --gen2
   - --region=europe-west1
-  - --source=./[entity]_commands
+  - --source=./actions_zapier
   - --trigger-http
   - --runtime=python310
-  - --entry-point=[entity]_commands
+  - --entry-point=actions_zapier
   - --service-account=command-processor-cf@yggdrasil-ai-hermod.iam.gserviceaccount.com
-  - --set-env-vars=PROJECT_ID=$PROJECT_ID,EVENT_BUS=$_EVENT_BUS
-  - --project=$PROJECT_ID
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  args:
-  - gcloud
-  - functions
-  - deploy
-  - [entity]-event-manager
-  - --gen2
-  - --region=europe-west1
-  - --source=./[entity]_event_manager
-  - --trigger-topic=$_EVENT_BUS
-  - --runtime=python310
-  - --entry-point=[entity]_manager
-  - --service-account=[entity]-management-cf@$PROJECT_ID.iam.gserviceaccount.com
-  - --set-env-vars=PROJECT_ID=$PROJECT_ID
+  - --set-env-vars=PROJECT_ID=$PROJECT_ID,EVENT_BUS=$_EVENT_BUS,EMAIL_ZAP_URL=$_EMAIL_ZAP_URL
   - --project=$PROJECT_ID
