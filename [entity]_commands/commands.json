@@ -1,0 +1,27 @@
+{
+    "create-[entity]": {
+        "description": {
+            "EN": "Create a new [entity]"
+        },
+        "category": "[category]",
+        "args": {
+            "author": {
+                "description": {
+                    "EN": "The author of the command"
+                },
+                "type": "string",
+                "required": true,
+                "default": "undefined"
+            },
+            "[entity]Id": {
+                "description": {
+                    "EN": "The id of the [entity]"
+                },
+                "type": "string",
+                "required": true,
+                "default": "undefined"
+            }
+        },
+        "endpoint": "https://[entity]-commands-ai32xjq4va-ew.a.run.app/create"
+    }
+}

@@ -1,0 +1,41 @@
+steps:
+- name: 'python:3.10'
+  args:
+  - pip
+  - install
+  - firebase-admin
+  - --user
+- name: 'python:3.10'
+  args:
+  - python
+  - upload_commands.py
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  args:
+  - gcloud
+  - functions
+  - deploy
+  - [entity]-commands
+  - --gen2
+  - --region=europe-west1
+  - --source=./[entity]_commands
+  - --trigger-http
+  - --runtime=python310
+  - --entry-point=[entity]_commands
+  - --service-account=command-processor-cf@yggdrasil-ai-hermod.iam.gserviceaccount.com
+  - --set-env-vars=PROJECT_ID=$PROJECT_ID,EVENT_BUS=$_EVENT_BUS
+  - --project=$PROJECT_ID
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  args:
+  - gcloud
+  - functions
+  - deploy
+  - [entity]-event-manager
+  - --gen2
+  - --region=europe-west1
+  - --source=./[entity]_event_manager
+  - --trigger-topic=$_EVENT_BUS
+  - --runtime=python310
+  - --entry-point=[entity]_manager
+  - --service-account=[entity]-management-cf@$PROJECT_ID.iam.gserviceaccount.com
+  - --set-env-vars=PROJECT_ID=$PROJECT_ID
+  - --project=$PROJECT_ID

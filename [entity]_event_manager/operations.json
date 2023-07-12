@@ -1,0 +1,10 @@
+{
+    "spoke": {
+        "delete": {
+            "payload_required": []
+        },
+        "create": {
+            "payload_required": []
+        }
+    }
+}
